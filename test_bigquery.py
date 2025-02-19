@@ -1,16 +1,16 @@
-from google.cloud import bigquery
+import os
+from dotenv import load_dotenv
 
-try:
-    # Initialize the BigQuery client
-    client = bigquery.Client()
+# Load environment variables from .env file
+load_dotenv()
 
-    # Run a test query
-    query = "SELECT 1 AS test_column"
-    query_job = client.query(query)  
-    results = query_job.result()  
+# Check if the variable is loaded
+credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
-    for row in results:
-        print(f"✅ Connection Successful! Test Query Output: {row.test_column}")
+if not credentials_path:
+    raise ValueError("❌ GOOGLE_APPLICATION_CREDENTIALS is not set or not found in .env file")
 
-except Exception as e:
-    print(f"❌ Connection Failed: {e}")
+print(f"✅ Using credentials from: {credentials_path}")
+
+# (Optional) Print all environment variables (for debugging)
+# print(os.environ)
